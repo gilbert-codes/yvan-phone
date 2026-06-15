@@ -1,0 +1,23 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+  <h2>Phones</h2>
+  <div class="grid">
+    {% for phone in phones %}
+      <article class="card">
+        {% if phone.image %}
+          <img src="{{ phone.image.url }}" alt="{{ phone.name }}" class="phone-img" />
+        {% else %}
+          <div class="phone-img placeholder">No image</div>
+        {% endif %}
+        <div class="card-body">
+          <h3><a href="{% url 'store:phone_detail' phone.pk %}">{{ phone.name }}</a></h3>
+          <p class="price">ZAR {{ phone.price }}</p>
+          <p class="excerpt">{{ phone.description|truncatechars:120 }}</p>
+        </div>
+      </article>
+    {% empty %}
+      <p>No phones yet. Add some in the admin.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

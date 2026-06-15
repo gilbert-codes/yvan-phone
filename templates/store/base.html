@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yvan Phone Store</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-top">
+        <div class="profile-section">
+          {% if user.is_authenticated %}
+            <div class="profile-card">
+              <div class="profile-avatar">{{ user.username|first|upper }}</div>
+              <div class="profile-info">
+                <p class="profile-name">{{ user.get_full_name|default:user.username }}</p>
+                <p class="profile-email">{{ user.email }}</p>
+              </div>
+            </div>
+          {% else %}
+            <div class="profile-card guest">
+              <div class="profile-avatar">?</div>
+              <p class="profile-name">Guest User</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="container">
+        <h1>Yvan Phone Store</h1>
+        <p>Call/Text: 0791364244 — Yvan Lambert</p>
+      </div>
+    </header>
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+      <div class="container">© Yvan Phone Store</div>
+    </footer>
+  </body>
+</html>
