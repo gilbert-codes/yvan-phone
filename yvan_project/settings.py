@@ -13,29 +13,31 @@ try:
 except Exception:
     env = None
 
+# SECRET KEY
 if env:
     SECRET_KEY = env('SECRET_KEY', default='replace-this-with-a-secure-secret')
 else:
     SECRET_KEY = 'replace-this-with-a-secure-secret'
 
+# DEBUG
 if env:
     DEBUG = env.bool('DEBUG', default=True)
 else:
     DEBUG = True
 
+# ALLOWED HOSTS
 if env:
     ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 else:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['yvan-phone.onrender.com', 'localhost', '127.0.0.1']
 
-# Optional store location for embedding Google Maps (set via .env or environment variables)
+# Optional store location for embedding Google Maps
 if env:
     STORE_LAT = env('STORE_LAT', default=None)
     STORE_LON = env('STORE_LON', default=None)
     STORE_NAME = env('STORE_NAME', default='Yvan Phone Store')
     GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY', default=None)
 else:
-    # fall back to environment variables if django-environ isn't installed
     STORE_LAT = os.environ.get('STORE_LAT')
     STORE_LON = os.environ.get('STORE_LON')
     STORE_NAME = os.environ.get('STORE_NAME', 'Yvan Phone Store')
@@ -53,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ADDED - For static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,17 +94,20 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
+# ============= STATIC FILES =============
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+# WhiteNoise for static files in production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ============= MEDIA FILES =============
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
