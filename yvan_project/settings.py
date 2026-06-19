@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'yvan_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),  # Fixed: converted to string
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -124,8 +124,18 @@ cloudinary.config(
     cloud_name="di5r5oiju",
     api_key="347921383578929",
     api_secret="IEm7tgeNxPZig0XD_rxrszfFW7M",
-    secure=True
+    secure=True,
+    api_proxy=None,
+    timeout=60
 )
+
+# Cloudinary settings dictionary
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'di5r5oiju',
+    'API_KEY': '347921383578929',
+    'API_SECRET': 'IEm7tgeNxPZig0XD_rxrszfFW7M',
+    'SECURE': True,
+}
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
