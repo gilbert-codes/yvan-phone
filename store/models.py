@@ -20,9 +20,7 @@ class Phone(models.Model):
         'image',
         blank=True,
         null=True,
-        folder='phones/',
-        format='jpg',
-        quality='auto:best'
+        folder='phones/'
     )
     voice_note = models.FileField(upload_to='voice/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
