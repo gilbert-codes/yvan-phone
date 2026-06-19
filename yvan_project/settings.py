@@ -125,22 +125,18 @@ cloudinary.config(
     API_SECRET = "IEm7tgeNxPZig0XD_rxrszfFW7M"
 )
 
-# Use Cloudinary for media file storage
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 # ============= FIX HTTP/2 & HTTPS ERRORS =============
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
-SECURE_SSL_REDIRECT = False  # IMPORTANT - set to False
-SESSION_COOKIE_SECURE = False  # Temporarily disable
-CSRF_COOKIE_SECURE = False  # Temporarily disable
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 SECURE_HSTS_PRELOAD = False
 
-# Allow all hosts temporarily for testing
-ALLOWED_HOSTS = ['*']
-
-# CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = [
     'https://yvan-phone.onrender.com',
     'http://yvan-phone.onrender.com',
