@@ -21,9 +21,9 @@ else:
 
 # DEBUG - Set to False for production
 if env:
-    DEBUG = env.bool('DEBUG', default=False)
+    DEBUG = env.bool('DEBUG', default=True)
 else:
-    DEBUG = False
+    DEBUG = True
 
 # ALLOWED HOSTS
 if env:
