@@ -19,11 +19,11 @@ if env:
 else:
     SECRET_KEY = 'replace-this-with-a-secure-secret'
 
-# DEBUG
+# DEBUG - Set to False for production
 if env:
-    DEBUG = env.bool('DEBUG', default=True)
+    DEBUG = env.bool('DEBUG', default=False)
 else:
-    DEBUG = True
+    DEBUG = False
 
 # ALLOWED HOSTS
 if env:
@@ -51,11 +51,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # ADDED - For static files in production
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -111,3 +113,17 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============= CLOUDINARY CONFIGURATION =============
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+    CLOUD_NAME = "di5r5oiju",
+    API_KEY = "347921383578929",
+    API_SECRET = "IEm7tgeNxPZig0XD_rxrszfFW7M"
+)
+
+# Use Cloudinary for media file storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
