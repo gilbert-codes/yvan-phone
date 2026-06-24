@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     icon = models.CharField(max_length=50, blank=True, help_text="FontAwesome icon class")
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,7 +14,7 @@ class Category(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if not self.slug and self.name:
             self.slug = self.name.lower().replace(' ', '-')
         super().save(*args, **kwargs)
 
@@ -31,7 +31,7 @@ class Phone(models.Model):
     ]
     
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='phones')
     
     # Pricing
@@ -75,7 +75,7 @@ class Phone(models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if not self.slug and self.name:
             self.slug = self.name.lower().replace(' ', '-')
         super().save(*args, **kwargs)
 
@@ -85,7 +85,7 @@ class Phone(models.Model):
 
     @property
     def discounted_price(self):
-        if self.discount_percent > 0:
+        if self.discount_percent > 0 and self.price:
             return self.price - (self.price * self.discount_percent / 100)
         return self.price
 
