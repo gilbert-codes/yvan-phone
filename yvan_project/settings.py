@@ -1,48 +1,30 @@
 import os
 from pathlib import Path
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+# =========================
+# BASE DIRECTORY
+# =========================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Try to read environment variables from a .env file using django-environ.
-try:
-    import environ
-    env = environ.Env(DEBUG=(bool, True))
-    env_file = BASE_DIR / '.env'
-    if env_file.exists():
-        env.read_env(str(env_file))
-except Exception:
-    env = None
+# =========================
+# SECURITY
+# =========================
+SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
 
-# SECRET KEY
-if env:
-    SECRET_KEY = env('SECRET_KEY', default='replace-this-with-a-secure-secret')
-else:
-    SECRET_KEY = 'replace-this-with-a-secure-secret'
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# DEBUG - Set to False for production
-if env:
-    DEBUG = env.bool('DEBUG', default=True)
-else:
-    DEBUG = True
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1"
+).split(",")
 
-# ALLOWED HOSTS
-if env:
-    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
-else:
-    ALLOWED_HOSTS = ['yvan-phone.onrender.com', 'localhost', '127.0.0.1']
-
-# Optional store location for embedding Google Maps
-if env:
-    STORE_LAT = env('STORE_LAT', default=None)
-    STORE_LON = env('STORE_LON', default=None)
-    STORE_NAME = env('STORE_NAME', default='Yvan Phone Store')
-    GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY', default=None)
-else:
-    STORE_LAT = os.environ.get('STORE_LAT')
-    STORE_LON = os.environ.get('STORE_LON')
-    STORE_NAME = os.environ.get('STORE_NAME', 'Yvan Phone Store')
-    GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
-
+# =========================
+# APPLICATIONS
+# =========================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,32 +32,71 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'store',
+
+    # Cloudinary
     'cloudinary',
     'cloudinary_storage',
+
+    # Your app
+    'your_app_name',
 ]
 
+# =========================
+# CLOUDINARY CONFIG
+# =========================
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
+
+# =========================
+# FILE STORAGE (Cloudinary)
+# =========================
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# =========================
+# DATABASE (SQLite default)
+# =========================
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# =========================
+# MIDDLEWARE
+# =========================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'yvan_project.urls'
+# =========================
+# ROOT URL
+# =========================
+ROOT_URLCONF = 'your_project_name.urls'
 
+# =========================
+# TEMPLATES
+# =========================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -84,87 +105,38 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'yvan_project.wsgi.application'
+# =========================
+# WSGI
+# =========================
+WSGI_APPLICATION = 'your_project_name.wsgi.application'
 
-# ============= DATABASE =============
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
-    }
-}
+# =========================
+# PASSWORD VALIDATION
+# =========================
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
 
-AUTH_PASSWORD_VALIDATORS = []
-
+# =========================
+# LANGUAGE / TIME
+# =========================
 LANGUAGE_CODE = 'en-us'
+
 TIME_ZONE = 'UTC'
+
 USE_I18N = True
 USE_TZ = True
 
-# ============= STATIC FILES =============
+# =========================
+# STATIC FILES
+# =========================
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-# WhiteNoise for static files in production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# ============= MEDIA FILES =============
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+# =========================
+# DEFAULT PRIMARY KEY
+# =========================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# ============= CLOUDINARY CONFIGURATION =============
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
-cloudinary.config(
-    cloud_name="di5r5oiju",
-    api_key="347921383578929",
-    api_secret="IEm7tgeNxPZig0XD_rxrszfFW7M",
-    secure=True,
-    api_proxy=None,
-    timeout=60
-)
-
-# Cloudinary settings dictionary
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'di5r5oiju',
-    'API_KEY': '347921383578929',
-    'API_SECRET': 'IEm7tgeNxPZig0XD_rxrszfFW7M',
-    'SECURE': True,
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# ============= FIX HTTP/2 & HTTPS ERRORS =============
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-SECURE_HSTS_PRELOAD = False
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://yvan-phone.onrender.com',
-    'http://yvan-phone.onrender.com',
-]
-
-# ============= LOGGING =============
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
