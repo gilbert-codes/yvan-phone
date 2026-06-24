@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =========================
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
 
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
 
-    # Your app
-    'your_app_name',
+    # Your app (EXISTING)
+    'store',
 ]
 
 # =========================
@@ -57,7 +57,7 @@ cloudinary.config(
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # =========================
-# DATABASE (SQLite default)
+# DATABASE
 # =========================
 DATABASES = {
     'default': {
@@ -83,9 +83,9 @@ MIDDLEWARE = [
 ]
 
 # =========================
-# ROOT URL
+# ROOT URL CONFIG
 # =========================
-ROOT_URLCONF = 'your_project_name.urls'
+ROOT_URLCONF = 'yvan_project.urls'
 
 # =========================
 # TEMPLATES
@@ -108,7 +108,7 @@ TEMPLATES = [
 # =========================
 # WSGI
 # =========================
-WSGI_APPLICATION = 'your_project_name.wsgi.application'
+WSGI_APPLICATION = 'yvan_project.wsgi.application'
 
 # =========================
 # PASSWORD VALIDATION
@@ -124,7 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # LANGUAGE / TIME
 # =========================
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
