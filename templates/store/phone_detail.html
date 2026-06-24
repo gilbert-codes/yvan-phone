@@ -2,76 +2,55 @@
 
 {% block content %}
 
-<article class="phone-detail">
+<h2>{{ phone.name }}</h2>
 
-  <h2>{{ phone.name }}</h2>
+{% if phone.image %}
+  <img src="{{ phone.image.url }}" style="width:100%; border-radius:10px;">
+{% endif %}
 
-  <p class="category">
-    Category: {{ phone.category.name }}
-  </p>
+<p>{{ phone.description }}</p>
 
-  {% if phone.image %}
-    <img src="{{ phone.image.url }}" alt="{{ phone.name }}" class="detail-img" />
+<p><b>Price:</b> {{ phone.price }}</p>
+
+<!-- VOICE -->
+<div>
+  {% if phone.voice_note %}
+    <audio controls>
+      <source src="{{ phone.voice_note.url }}">
+    </audio>
+  {% else %}
+    <a href="{% url 'store:generate_voice' phone.pk %}" class="btn">🔊 Generate Voice</a>
   {% endif %}
+</div>
 
-  <p class="price">ZAR {{ phone.price }}</p>
+<!-- ACTIONS -->
+<br>
 
-  <!-- DESCRIPTION -->
-  <div class="description">
-    <h3>Description</h3>
-    {{ phone.description|linebreaks }}
-  </div>
+<a href="{% url 'store:add_to_cart' phone.pk %}" class="btn">🛒 Add to Cart</a>
 
-  <!-- 🔊 VOICE SECTION -->
-  <div class="voice-controls" style="margin-top:15px;">
+<a href="tel:+250788000000" class="btn">📞 Call</a>
 
-    {% if phone.voice_note %}
-      <audio controls style="width:100%;">
-        <source src="{{ phone.voice_note.url }}" type="audio/mpeg">
-        Your browser does not support audio.
-      </audio>
+<a href="https://wa.me/250788000000?text=I%20want%20{{ phone.name }}" class="btn">💬 WhatsApp</a>
 
-      <!-- replay button -->
-      <a href="{% url 'store:generate_voice' phone.pk %}" class="btn">
-        🔄 Regenerate Voice
-      </a>
+<a href="{{ google_maps_url }}" target="_blank" class="btn">📍 Directions</a>
 
-    {% else %}
-      <a href="{% url 'store:generate_voice' phone.pk %}" class="btn">
-        🔊 Generate Voice
-      </a>
-    {% endif %}
+<hr>
 
-  </div>
+<!-- MAP -->
+<iframe
+  width="100%"
+  height="300"
+  src="https://www.google.com/maps?q=Nyarugenge+Makuza+Parking+Kigali&output=embed">
+</iframe>
 
-  <hr>
-
-  <!-- 📍 LOCATION SECTION -->
-  <div class="map-embed">
-
-    <h3>📍 Our Location</h3>
-    <p>Nyarugenge — near Makuza Parking, Kigali</p>
-
-    <!-- SIMPLE EMBED (WORKS ALWAYS - NO API KEY REQUIRED) -->
-    <iframe
-      width="100%"
-      height="320"
-      style="border:0"
-      loading="lazy"
-      allowfullscreen
-      src="https://www.google.com/maps?q=Nyarugenge+Makuza+Parking+Kigali&output=embed">
-    </iframe>
-
-    <!-- NAVIGATION BUTTON -->
-    <a
-      class="btn"
-      href="https://www.google.com/maps/dir/?api=1&destination=Nyarugenge+Makuza+Parking+Kigali"
-      target="_blank">
-      🧭 Get Directions
-    </a>
-
-  </div>
-
-</article>
+<!-- AUTO VOICE (OPTIONAL) -->
+<script>
+window.onload = function () {
+    let text = "{{ phone.name }} {{ phone.description|escapejs }}";
+    let speech = new SpeechSynthesisUtterance(text);
+    speech.lang = "en-US";
+    speechSynthesis.speak(speech);
+};
+</script>
 
 {% endblock %}
