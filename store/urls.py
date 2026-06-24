@@ -8,6 +8,6 @@ urlpatterns = [
     path('', include('store.urls')),
 ]
 
-# for voice/audio files (MEDIA)
+# only for local media (voice files)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
