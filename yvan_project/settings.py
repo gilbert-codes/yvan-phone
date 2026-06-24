@@ -19,7 +19,7 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
-    "localhost,127.0.0.1"
+    "localhost,127.0.0.1,yvan-phone.onrender.com"
 ).split(",")
 
 # =========================
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
 
-    # Your app (EXISTING)
+    # Your app
     'store',
 ]
 
@@ -52,8 +52,12 @@ cloudinary.config(
 )
 
 # =========================
-# FILE STORAGE (Cloudinary)
+# MEDIA FILES (IMPORTANT FIX)
 # =========================
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Cloudinary storage
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # =========================
@@ -83,7 +87,7 @@ MIDDLEWARE = [
 ]
 
 # =========================
-# ROOT URL CONFIG
+# ROOT URL
 # =========================
 ROOT_URLCONF = 'yvan_project.urls'
 
@@ -134,6 +138,9 @@ USE_TZ = True
 # =========================
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# WhiteNoise (important for Render)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # =========================
 # DEFAULT PRIMARY KEY
