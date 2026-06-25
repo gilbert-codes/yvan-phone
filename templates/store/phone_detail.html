@@ -177,22 +177,6 @@
                     <p style="margin: 0;">{{ phone.description }}</p>
                 </div>
 
-                <!-- VOICE SECTION -->
-                <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 20px 0;">
-                    <h5 style="color: #856404; margin-bottom: 10px;">🔊 Listen to Phone Details</h5>
-                    {% if phone.voice_note %}
-                        <audio controls class="audio-player">
-                            <source src="{{ phone.voice_note.url }}" type="audio/mpeg">
-                            Your browser does not support the audio element.
-                        </audio>
-                    {% else %}
-                        <p style="color: #856404; margin-bottom: 10px;">No voice note yet. Generate one:</p>
-                        <a href="{% url 'store:generate_voice' phone.pk %}" class="btn btn-custom btn-voice" style="display: inline-block; width: auto;">
-                            🎙️ Generate Voice Description
-                        </a>
-                    {% endif %}
-                </div>
-
                 <!-- ACTION BUTTONS -->
                 <div class="btn-group-custom">
                     <a href="https://wa.me/250791364244?text=Hi! I'm interested in the {{ phone.name }}" target="_blank" class="btn btn-custom btn-whatsapp">
