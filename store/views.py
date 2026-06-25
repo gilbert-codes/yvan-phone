@@ -4,6 +4,8 @@ from django.conf import settings
 from .models import Phone
 import os
 from gtts import gTTS
+import cloudinary.uploader
+import tempfile
 
 
 def index(request):
@@ -13,10 +15,7 @@ def index(request):
 
 def phone_detail(request, pk):
     phone = get_object_or_404(Phone, pk=pk)
-
-    return render(request, 'store/phone_detail.html', {
-        'phone': phone
-    })
+    return render(request, 'store/phone_detail.html', {'phone': phone})
 
 
 def generate_voice(request, pk):
@@ -25,17 +24,38 @@ def generate_voice(request, pk):
     if not phone.description:
         return HttpResponse("No description available")
 
+    # Check if voice already exists in Cloudinary
+    if phone.voice_note and phone.voice_note.startswith('http'):
+        return redirect(phone.voice_note)
+
+    # Generate audio locally first
     filename = f"phone_{phone.pk}.mp3"
-    voice_dir = os.path.join(settings.MEDIA_ROOT, "voice")
-    os.makedirs(voice_dir, exist_ok=True)
-
-    file_path = os.path.join(voice_dir, filename)
-
-    if not os.path.exists(file_path):
+    
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as tmp_file:
         tts = gTTS(text=phone.description, lang='en')
-        tts.save(file_path)
+        tts.save(tmp_file.name)
+        tmp_file_path = tmp_file.name
 
-        phone.voice_note = f"voice/{filename}"
+    try:
+        # Upload to Cloudinary
+        upload_result = cloudinary.uploader.upload(
+            tmp_file_path,
+            resource_type="video",  # video includes audio files
+            folder="voice_notes/",
+            public_id=f"phone_{phone.pk}"
+        )
+        
+        # Save Cloudinary URL to model
+        phone.voice_note = upload_result['secure_url']
         phone.save()
-
-    return redirect(phone.voice_note.url)
+        
+        # Clean up temp file
+        os.unlink(tmp_file_path)
+        
+        return redirect(phone.voice_note)
+        
+    except Exception as e:
+        # Clean up temp file
+        if os.path.exists(tmp_file_path):
+            os.unlink(tmp_file_path)
+        return HttpResponse(f"Error generating voice: {str(e)}")
