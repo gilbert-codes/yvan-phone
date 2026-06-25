@@ -13,17 +13,107 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body { font-family: Arial; background: #f5f6fa; }
-        .navbar { background: #2563eb; }
-        .navbar a { color: white !important; margin-right: 15px; }
-        .card { margin-bottom: 20px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 15px 30px !important;
+        }
+
+        .navbar-brand {
+            font-size: 24px !important;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar a {
+            color: white !important;
+            margin-right: 25px !important;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar a:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .navbar a:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
     </style>
 </head>
 
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg px-3">
+<nav class="navbar navbar-expand-lg">
     <a class="navbar-brand text-white" href="{% url 'store:index' %}">
         📱 Yvan Store
     </a>
@@ -34,9 +124,17 @@
 </nav>
 
 <!-- CONTENT -->
-<div class="container mt-4">
+<div class="container mt-5">
     {% block content %}{% endblock %}
 </div>
+
+<!-- FOOTER -->
+<footer style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-top: 50px; padding: 30px; text-align: center;">
+    <p style="margin: 0;">© 2026 Yvan Phone Store - Your Trusted Mobile Phone Retailer</p>
+    <p style="margin-top: 10px; font-size: 14px; opacity: 0.9;">
+        📍 Nyarugenge, Kigali | 📱 <a href="https://wa.me/250791364244" style="color: white; text-decoration: none;">+250 791 364 244</a>
+    </p>
+</footer>
 
 </body>
 </html>
