@@ -22,10 +22,3 @@ class Phone(models.Model):
         return self.name
 
 
-class Cart(models.Model):
-    session_id = models.CharField(max_length=255)
-    phone = models.ForeignKey(Phone, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.phone.name} x {self.quantity}"

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Phone, Cart
+from .models import Category, Phone
 
 
 @admin.register(Category)
@@ -14,8 +14,3 @@ class PhoneAdmin(admin.ModelAdmin):
     list_filter = ['category']
     search_fields = ['name', 'description']
     readonly_fields = ['created_at']
-
-
-@admin.register(Cart)
-class CartAdmin(admin.ModelAdmin):
-    list_display = ['phone', 'quantity', 'session_id']

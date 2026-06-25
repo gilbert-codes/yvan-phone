@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.conf import settings
-from .models import Phone, Cart
+from .models import Phone
 import os
 from gtts import gTTS
 
@@ -39,40 +39,3 @@ def generate_voice(request, pk):
         phone.save()
 
     return redirect(phone.voice_note.url)
-
-
-def add_to_cart(request, pk):
-    phone = get_object_or_404(Phone, pk=pk)
-
-    if not request.session.session_key:
-        request.session.create()
-
-    session_id = request.session.session_key
-
-    item, created = Cart.objects.get_or_create(
-        session_id=session_id,
-        phone=phone,
-        defaults={'quantity': 1}
-    )
-
-    if not created:
-        item.quantity += 1
-        item.save()
-
-    return redirect('store:phone_detail', pk=pk)
-
-
-def cart(request):
-    session_id = request.session.session_key
-
-    if not session_id:
-        items = []
-        total = 0
-    else:
-        items = Cart.objects.filter(session_id=session_id)
-        total = sum((item.phone.price or 0) * item.quantity for item in items)
-
-    return render(request, 'store/cart.html', {
-        'items': items,
-        'total': total
-    })
