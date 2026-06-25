@@ -7,7 +7,10 @@ SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1"
+).split(",")
 
 
 INSTALLED_APPS = [
@@ -24,17 +27,32 @@ INSTALLED_APPS = [
     'store',
 ]
 
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'yvan_project.urls'
 
@@ -53,7 +71,9 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'yvan_project.wsgi.application'
+
 
 DATABASES = {
     'default': {
@@ -62,16 +82,27 @@ DATABASES = {
     }
 }
 
+
+AUTH_PASSWORD_VALIDATORS = []
+
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Africa/Kigali'
 USE_I18N = True
 USE_TZ = True
 
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+
+# =========================
+# MEDIA (IMPORTANT FOR VOICE)
+# =========================
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

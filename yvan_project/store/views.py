@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.conf import settings
 from .models import Phone, Cart
 import os
-from gtts import gTTS
 
 
 def index(request):
@@ -15,7 +14,8 @@ def phone_detail(request, pk):
     phone = get_object_or_404(Phone, pk=pk)
 
     return render(request, 'store/phone_detail.html', {
-        'phone': phone
+        'phone': phone,
+        'google_maps_url': "https://www.google.com/maps?q=Makuza+Peace+Plaza+Kigali"
     })
 
 
@@ -23,7 +23,9 @@ def generate_voice(request, pk):
     phone = get_object_or_404(Phone, pk=pk)
 
     if not phone.description:
-        return HttpResponse("No description available")
+        return HttpResponse("No description")
+
+    from gtts import gTTS
 
     filename = f"phone_{phone.pk}.mp3"
     voice_dir = os.path.join(settings.MEDIA_ROOT, "voice")
@@ -64,13 +66,9 @@ def add_to_cart(request, pk):
 
 def cart(request):
     session_id = request.session.session_key
+    items = Cart.objects.filter(session_id=session_id)
 
-    if not session_id:
-        items = []
-        total = 0
-    else:
-        items = Cart.objects.filter(session_id=session_id)
-        total = sum((item.phone.price or 0) * item.quantity for item in items)
+    total = sum((item.phone.price or 0) * item.quantity for item in items)
 
     return render(request, 'store/cart.html', {
         'items': items,
