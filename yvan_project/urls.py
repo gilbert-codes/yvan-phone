@@ -1,13 +1,15 @@
-from django.urls import path
-from . import views
-
-app_name = 'store'
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('phone/<int:pk>/', views.phone_detail, name='phone_detail'),
-    path('phone/<int:pk>/voice/', views.generate_voice, name='generate_voice'),
+    path('admin/', admin.site.urls),
 
-    path('cart/add/<int:pk>/', views.add_to_cart, name='add_to_cart'),
-    path('cart/', views.cart, name='cart'),
+    # include store app urls
+    path('', include('store.urls')),
 ]
+
+# media files (images, voice notes)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
