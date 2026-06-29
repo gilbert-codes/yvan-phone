@@ -1,31 +1,29 @@
 {% extends 'store/base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1 class="text-center mb-4">📱 Yvan Phone Store</h1>
-    <div class="row">
-        {% for phone in phones %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                {% if phone.image %}
-                <img src="{{ phone.image }}" class="card-img-top" alt="{{ phone.name }}" style="height: 200px; object-fit: cover;">
-                {% else %}
-                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                    <span class="text-muted">No Image</span>
-                </div>
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ phone.name }}</h5>
-                    <p class="card-text text-primary fw-bold">{{ phone.price }} RWF</p>
-                    <a href="{% url 'store:phone_detail' phone.pk %}" class="btn btn-primary w-100">View Details</a>
-                </div>
+<h1 class="text-center mb-4">📱 Yvan Phone Store</h1>
+<div class="row">
+    {% for phone in phones %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            {% if phone.image %}
+            <img src="{{ phone.image }}" class="card-img-top" alt="{{ phone.name }}" style="height: 250px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                <span class="text-muted">No Image</span>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ phone.name }}</h5>
+                <p class="card-text text-primary fw-bold">{{ phone.price }} RWF</p>
+                <a href="{% url 'store:phone_detail' phone.pk %}" class="btn btn-primary w-100">View Details</a>
             </div>
         </div>
-        {% empty %}
-        <div class="col-12 text-center">
-            <p>No phones available.</p>
-        </div>
-        {% endfor %}
     </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <p>No phones available.</p>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}
