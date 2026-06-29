@@ -1,0 +1,216 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<style>
+    .phone-detail-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        padding: 30px;
+        color: white;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .phone-image-box {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .phone-image-box img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        max-height: 400px;
+        object-fit: contain;
+    }
+    .phone-info {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    .price-tag {
+        font-size: 32px;
+        font-weight: bold;
+        color: #2563eb;
+        background: #f0f4ff;
+        padding: 15px 20px;
+        border-radius: 10px;
+        display: inline-block;
+    }
+    .contact-section {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        border-radius: 15px;
+        padding: 25px;
+        color: white;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .contact-item {
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+    .btn-group-custom {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+    }
+    .btn-custom {
+        flex: 1;
+        min-width: 150px;
+        padding: 12px 20px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+    }
+    .btn-whatsapp {
+        background: #25D366;
+        color: white;
+    }
+    .btn-whatsapp:hover {
+        background: #1fbb5a;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        color: white;
+    }
+    .btn-back {
+        background: #6c757d;
+        color: white;
+    }
+    .btn-back:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        color: white;
+    }
+    .map-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    .description-box {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid #2563eb;
+        margin: 20px 0;
+        line-height: 1.6;
+    }
+    .category-badge {
+        background: #667eea;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+    @media (max-width: 768px) {
+        .btn-group-custom {
+            flex-direction: column;
+        }
+        .btn-custom {
+            min-width: 100%;
+        }
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="phone-detail-container">
+        <h1 style="margin-bottom: 10px;">📱 {{ phone.name }}</h1>
+        <p style="font-size: 16px; opacity: 0.9;">Premium Quality Mobile Phone</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="phone-image-box">
+                {% if phone.image %}
+                    <img src="{{ phone.image }}" alt="{{ phone.name }}">
+                {% else %}
+                    <p style="color: #999; padding: 40px;">No image available</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="phone-info">
+                <span class="category-badge">{{ phone.category.name }}</span>
+                
+                <div class="price-tag">
+                    {{ phone.price }} RWF
+                </div>
+
+                <div class="description-box">
+                    <h5 style="color: #2563eb; margin-bottom: 10px;">📋 Description</h5>
+                    <p style="margin: 0;">{{ phone.description }}</p>
+                </div>
+
+                <div class="btn-group-custom">
+                    <a href="https://wa.me/250791364244?text=Hi! I'm interested in the {{ phone.name }}" target="_blank" class="btn-custom btn-whatsapp">
+                        📱 Contact on WhatsApp
+                    </a>
+                    <a href="{% url 'store:index' %}" class="btn-custom btn-back">
+                        ← Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-section mt-4">
+        <h3 style="margin-bottom: 20px;">📞 Yvan Phone Store - Contact Information</h3>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="contact-item">
+                    <strong>📍 Location:</strong><br>
+                    Nyarugenge, Kigali<br>
+                    Near Makuza Parking
+                </div>
+                <div class="contact-item">
+                    <strong>📱 WhatsApp:</strong><br>
+                    <a href="https://wa.me/250791364244" style="color: white; text-decoration: underline;">+250 791 364 244</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="contact-item">
+                    <strong>🕐 Working Hours:</strong><br>
+                    Monday - Friday: 8:00 AM - 6:00 PM<br>
+                    Saturday: 9:00 AM - 4:00 PM<br>
+                    Sunday: Closed
+                </div>
+                <div class="contact-item">
+                    <strong>💼 About Us:</strong><br>
+                    Your trusted phone shop in Kigali with quality products!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="map-container mt-4">
+        <h3 style="margin-bottom: 20px;">🗺️ Visit Our Store</h3>
+        <p style="color: #666; margin-bottom: 15px;">Find us at Nyarugenge near Makuza Parking, Kigali</p>
+        
+        <iframe
+            width="100%"
+            height="400"
+            style="border: none; border-radius: 10px;"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.2842134917536!2d30.0587!3d-1.9536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca627dca0001d%3A0x1234567890abc!2sNyarugenge%2C%20Kigali!5e0!3m2!1sen!2srw!4v1234567890">
+        </iframe>
+        
+        <p style="color: #999; font-size: 12px; margin-top: 10px; text-align: center;">
+            📍 Exact location: Nyarugenge District, near Makuza Parking
+        </p>
+    </div>
+</div>
+{% endblock %}
